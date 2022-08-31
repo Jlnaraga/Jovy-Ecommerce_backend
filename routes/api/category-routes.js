@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find one category by its `id` value  
   // be sure to include its associated Products
   try {
@@ -25,18 +25,18 @@ router.get('/:id', (req, res) => {
     });
 
     if (!category) {
-      res.status(404).json({ message: 'No library card found with that id!' });
+      res.status(404).json({ message: 'No category found with that id!' });
       return;
     }
 
-    res.status(200).json(categories);
+    res.status(200).json(category);
   } catch (err) {
     res.status(500).json(err);
   }
 
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
   try {
     const data = await Category.create(req.body);
@@ -47,25 +47,29 @@ router.post('/', (req, res) => {
       }
 });  
 
-router.put('/:id', (req, res) => {
-  // update a category by its `id` value
+router.put('/:id', async (req, res) => {
   try {
-    const data = await Category.create(req.body,  {
+
+    await Category.update(req.body, {
       where: {
-        id: req.params.id,
+        id: parseInt(req.params.id),
       },
     });
-    if (!userData[0]) {
-      res.status(404).json({ message: 'No category with this id!' });
+
+    const category = await Category.findByPk(req.params.id);
+
+    if (!category) {
+      res.status(404).json({ message: 'No category found with that id!' });
       return;
     }
-    res.status(200).json(userData);
+
+    res.status(200).json(category);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
   try {
     const data = await Category.destroy({
@@ -79,7 +83,7 @@ router.delete('/:id', (req, res) => {
       return;
     }
 
-    res.status(200).json(libraryCardData);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json(err);
   }
