@@ -2,7 +2,6 @@
 
 # 13 Object-Relational Mapping (ORM): E-Commerce Back End
 
-# jovy-employee-tracker
 
 [GitHub Link](https://github.com/Jlnaraga/Jovy-Ecommerce_backend.git)
 
